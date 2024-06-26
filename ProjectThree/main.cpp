@@ -11,8 +11,16 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
+
+void DisplayMenu();
+int AcceptMenuChoice();
+void Search(string filename);
+void ListNumerical(string filename);
+void ListHistogram(string filename);
 
 void DisplayMenu() {
 
@@ -61,10 +69,7 @@ void Search(/*use Groceries.txt file as input string*/string filename) {
 
 	groceriesFile.open(filename);
 
-	if (groceriesFile) {
-		cout << "Groceries file opened." << endl;
-	}
-	else {
+	if (!groceriesFile) {
 		cout << "Unable to open file." << endl;
 		exit(EXIT_FAILURE);
 	}
@@ -87,13 +92,13 @@ void ListNumerical(string filename) {
 	string currentWord;
 	int count = 0;
 	ifstream groceriesFile;
+	vector<string> fileWords;
+	vector<int> fileWordsCount;
+	int countIterator = 0;
 
 	groceriesFile.open(filename);
 
-	if (groceriesFile) {
-		cout << "Groceries file opened." << endl;
-	}
-	else {
+	if (!groceriesFile) {
 		cout << "Unable to open file." << endl;
 		exit(EXIT_FAILURE);
 	}
@@ -106,6 +111,26 @@ void ListNumerical(string filename) {
 		//cout each vector side by side using a for loop 
 		// cout vector[i] vector2[i]
 		groceriesFile >> currentWord;
+		for (string n : fileWords)
+		{
+			if (n == currentWord)
+			{
+				//add 1 count to fileWordsCount[countIterator];
+				fileWordsCount[countIterator] += 1;
+				countIterator++;
+			}
+			else {
+				fileWords.push_back(n);
+			}
+		}
+		
+		countIterator = 0;
+
+		for (string m : fileWords)
+		{
+			cout << m << " " << fileWordsCount[countIterator] << endl;
+			countIterator++;
+		}
 	}
 
 }
@@ -119,6 +144,7 @@ int main() {
 
 	//Search function test
 	//Search("Groceries.txt");
+	ListNumerical("Groceries.txt");
 
 	system("PAUSE");
 

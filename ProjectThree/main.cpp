@@ -12,7 +12,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
-#include <algorithm>
+#include <unordered_map>
 
 using namespace std;
 
@@ -89,62 +89,67 @@ void Search(/*use Groceries.txt file as input string*/string filename) {
 
 void ListNumerical(string filename) {
 
-	string currentWord;
-	int count = 0;
-	ifstream groceriesFile;
-	vector<string> fileWords;
-	vector<int> fileWordsCount;
-	int countIterator = 0;
-
-	groceriesFile.open(filename);
+	ifstream groceriesFile(filename);
+	unordered_map<string, int> wordCount;
+	string word;
 
 	if (!groceriesFile) {
 		cout << "Unable to open file." << endl;
 		exit(EXIT_FAILURE);
 	}
 
-	while (!groceriesFile.eof())
-	{
-		//Need to create a vector of words to hold every word
-		//Need to create a vector of count to hold occurrences of each word
-		//iterate through the entire file to store all data
-		//cout each vector side by side using a for loop 
-		// cout vector[i] vector2[i]
-		groceriesFile >> currentWord;
-		for (string n : fileWords)
-		{
-			if (n == currentWord)
-			{
-				//add 1 count to fileWordsCount[countIterator];
-				fileWordsCount[countIterator] += 1;
-				countIterator++;
-			}
-			else {
-				fileWords.push_back(n);
-			}
-		}
-		
-		countIterator = 0;
+	while (!groceriesFile.eof()) {
 
-		for (string m : fileWords)
-		{
-			cout << m << " " << fileWordsCount[countIterator] << endl;
-			countIterator++;
-		}
+		groceriesFile >> word;
+
+		wordCount[word]++;
+	}
+
+	for (const auto& pair : wordCount) {
+		cout << pair.first << " " << pair.second << endl;
 	}
 
 }
 
 void ListHistogram(string filename) {
 
+	ifstream groceriesFile(filename);
+	unordered_map<string, int> wordCount;
+	string word;
+
+	if (!groceriesFile) {
+		cout << "Unable to open file." << endl;
+		exit(EXIT_FAILURE);
+	}
+
+	while (!groceriesFile.eof()) {
+
+		groceriesFile >> word;
+
+		wordCount[word]++;
+	}
+
+	for (const auto& pair : wordCount) {
+		cout << pair.first << " ";
+		for (int i = 0; i < pair.second; ++i)
+		{
+			cout << "*";
+		}
+
+		cout << endl;
+
+	}
+
 }
 
 
 int main() {
 
-	//Search function test
+	/*Function Testing*/
 	//Search("Groceries.txt");
-	ListNumerical("Groceries.txt");
+	//ListNumerical("Groceries.txt");
+	//ListHistogram("Groceries.txt");
+
 
 	system("PAUSE");
 

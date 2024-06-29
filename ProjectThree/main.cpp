@@ -13,38 +13,18 @@
 #include <fstream>
 #include <vector>
 #include <unordered_map>
+#include "menu.h"
 
 using namespace std;
 
 //function declarations to avoid issues with calling one before it's declared
-void DisplayMenu();
-int AcceptMenuChoice();
 void Search(string filename);
 void ListNumerical(string filename);
 void ListHistogram(string filename);
 
-//displays the menu
-void DisplayMenu() {
-
-	cout << endl << "MENU OPTIONS" << endl;
-	cout << "1: Search Item Frequency" << endl;
-	cout << "2: List Purchased Item Frequencies - Numerical" << endl;
-	cout << "3: List Purchased Item Frequencies - Histogram" << endl;
-	cout << "4: Exit" << endl;
-
-}
-
-//calls the menu and prompts for user response, then calls the appropriate function
-int AcceptMenuChoice() {
-
-	int userChoice = -1;
-
-	DisplayMenu();
-	cout << "Your selection: ";
-	cin >> userChoice;
-	cout << endl;
-
-	switch (userChoice) {
+//handles the function calling using a Menu object param
+void SwitchStatement(Menu defaultMenu) {
+	switch (defaultMenu.GetUserChoice()) {
 	case 1:
 		Search("Groceries.txt");
 		break;
@@ -177,11 +157,12 @@ void ListHistogram(string filename) {
 
 int main() {
 
-	bool programOpen = true;
+	Menu menu;
 
 	//loop program while not exited
-	while (programOpen) {
-		AcceptMenuChoice();
+	while (menu.GetUserChoice() != 4) {
+		menu.AcceptUserChoice();
+		SwitchStatement(menu);
 	}
 
 	//added pause to ensure visibility
